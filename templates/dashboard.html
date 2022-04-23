@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="card-wrapper">
+
+    <div class="card">
+
+      <h1 class="center">Dashboard</h1>
+      <p class="center">Welcome to Twatter, <strong>{{ session['user']['name'] }}</strong>!</p>
+
+      <div class="center">
+        <a href="/user/signout" class="btn btn--secondary">Sign Out</a>
+      </div>
+    
+    </div>
+
+    <div class="card">
+
+      <h2 class="center">Your Info</h2>
+
+      <p>
+        <strong>ID:</strong> {{ session['user']['_id'] }}<br>
+        <strong>Name:</strong> {{ session['user']['name'] }}<br>
+        <strong>Email:</strong> {{ session['user']['email'] }}
+      </p>
+    
+    </div>
+  
+  </div>
+
+  <div class="card-wrapper tweet">
+    <div><img class="logo-image" src="https://img.icons8.com/external-flaticons-flat-flat-icons/64/000000/external-bird-veterinary-flaticons-flat-flat-icons.png" /></div>
+
+    <div class="tweet-card">
+      <form action="{{ url_for('main.add_twat') }}" method="POST" role="form">
+
+      <textarea onkeyup="tweetLength(this.value)" type="text" class="field tweet" name="add_twat" placeholder="What's happening?" required></textarea>
+
+      <div>
+        <p class="p-tweet" id="charcount"></p>
+        <input type="submit" value="Twat" class="btn twat">
+      </div>
+
+      </form>
+    </div>
+
+  </div>
+
+
+  <div class="tweets-wrapper">
+    {% for twat in twats %}
+      <div class="card l">
+        <p>{{ twat.text }}</p>
+          <div class="icons">
+            <a href="{{ url_for('main.delete_twat', oid=twat._id) }}" class="twat-buttons trash"><i class="fa-solid fa-trash"></i></a>
+            <a href="{{ url_for('main.retweet_twat', oid=twat._id) }}" class="twat-buttons rts"><i class="fa-solid fa-retweet"></i></a>
+            <a href="{{ url_for('main.like_twat', oid=twat._id) }}" class="twat-buttons likes"><i class="fa-solid fa-heart"></i></a>
+        </div>
+        <div>
+          <icon class="rts number-rts">{{ twat.retweets_counter }}</icon>
+          <icon class="likes number-likes">{{ twat.likes_counter }}</icon>
+        </div>
+      </div>
+    {% endfor  %}
+  </div>
+
+{% endblock %}
